@@ -1,9 +1,8 @@
-.PHONY: help install install-dev test lint format clean run-api run-cli
+.PHONY: help install test lint format clean run-api run-cli
 
 help:
 	@echo "API Doc Parser - 可用命令:"
-	@echo "  make install      - 安装生产环境依赖"
-	@echo "  make install-dev  - 安装开发环境依赖"
+	@echo "  make install      - 安装依赖"
 	@echo "  make test         - 运行测试"
 	@echo "  make lint         - 运行代码检查"
 	@echo "  make format       - 格式化代码"
@@ -13,9 +12,6 @@ help:
 
 install:
 	pip install -r requirements.txt
-
-install-dev:
-	pip install -r requirements-dev.txt
 	pip install -e .
 
 test:

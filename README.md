@@ -23,8 +23,6 @@
 
 ### 安装
 
-#### 方式1: 使用 pip 安装（推荐）
-
 ```bash
 # 克隆仓库
 git clone https://github.com/wowzhangji/doc_ai_parser.git
@@ -37,20 +35,13 @@ source .venv/bin/activate  # Linux/Mac
 
 # 安装依赖
 pip install -r requirements.txt
-
-# 开发环境安装（包含测试和代码检查工具）
-pip install -r requirements-dev.txt
 pip install -e .
 ```
 
-#### 方式2: 使用 Makefile
+或使用 Makefile:
 
 ```bash
-# 安装生产环境
 make install
-
-# 安装开发环境
-make install-dev
 ```
 
 ### 配置环境变量
@@ -179,8 +170,7 @@ doc_ai_parser/
 │   ├── providers/          # LLM提供商
 │   └── utils/              # 工具函数
 ├── tests/                  # 测试
-├── requirements.txt        # 生产依赖
-├── requirements-dev.txt    # 开发依赖
+├── requirements.txt        # 依赖文件
 ├── Makefile               # 常用命令
 ├── pyproject.toml
 └── README.md
@@ -207,8 +197,7 @@ make clean
 
 ## 依赖说明
 
-- `requirements.txt` - 生产环境依赖
-- `requirements-dev.txt` - 开发环境依赖（包含测试工具）
+- `requirements.txt` - 项目依赖（包含运行和开发工具）
 - `pyproject.toml` - 项目元数据和构建配置
 
 ## License
