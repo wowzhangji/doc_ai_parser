@@ -32,9 +32,6 @@ wheels/
 *.swo
 *~
 
-# Qoder IDE
-.qoder/
-
 # 测试和覆盖率
 .tox/
 .nox/

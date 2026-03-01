@@ -2,19 +2,28 @@
 
 <cite>
 **本文引用的文件**
-- [api.py](file://api-doc-parser/src/api_doc_parser/api.py)
-- [config.py](file://api-doc-parser/src/api_doc_parser/config.py)
-- [request.py](file://api-doc-parser/src/api_doc_parser/models/request.py)
-- [result.py](file://api-doc-parser/src/api_doc_parser/models/result.py)
-- [document.py](file://api-doc-parser/src/api_doc_parser/models/document.py)
-- [parser.py](file://api-doc-parser/src/api_doc_parser/core/parser.py)
-- [chunker.py](file://api-doc-parser/src/api_doc_parser/core/chunker.py)
-- [factory.py](file://api-doc-parser/src/api_doc_parser/providers/factory.py)
-- [base.py](file://api-doc-parser/src/api_doc_parser/providers/base.py)
-- [.env.example](file://api-doc-parser/.env.example)
-- [README.md](file://api-doc-parser/README.md)
-- [pyproject.toml](file://api-doc-parser/pyproject.toml)
+- [api.py](file://src/api.py)
+- [config.py](file://src/config.py)
+- [request.py](file://src/models/request.py)
+- [result.py](file://src/models/result.py)
+- [document.py](file://src/models/document.py)
+- [parser.py](file://src/core/parser.py)
+- [chunker.py](file://src/core/chunker.py)
+- [factory.py](file://src/providers/factory.py)
+- [base.py](file://src/providers/base.py)
+- [cli.py](file://src/cli.py)
+- [.env.example](file://.env.example)
+- [README.md](file://README.md)
+- [pyproject.toml](file://pyproject.toml)
 </cite>
+
+## 更新摘要
+**变更内容**
+- 更新了FastAPI Web服务的完整API端点文档
+- 新增了异步任务处理、同步解析、任务状态查询的详细说明
+- 更新了请求/响应模型和错误处理机制
+- 增强了提供商列表和配置说明
+- 完善了性能优化和故障排查指南
 
 ## 目录
 1. [简介](#简介)
@@ -38,7 +47,7 @@
 - 已弃用功能与向后兼容性说明（本版本未发现弃用接口）
 
 ## 项目结构
-该项目采用“模型-核心-提供方-接口”分层组织，核心流程为：前端上传文件 → FastAPI 接收 → 异步/同步解析 → LLM 提供商 → 结果聚合 → 返回。
+该项目采用"模型-核心-提供方-接口"分层组织，核心流程为：前端上传文件 → FastAPI 接收 → 异步/同步解析 → LLM 提供商 → 结果聚合 → 返回。
 
 ```mermaid
 graph TB
@@ -73,21 +82,21 @@ CFG --> A
 ENV --> CFG
 ```
 
-图表来源
-- [api.py](file://api-doc-parser/src/api_doc_parser/api.py#L1-L371)
-- [request.py](file://api-doc-parser/src/api_doc_parser/models/request.py#L1-L57)
-- [result.py](file://api-doc-parser/src/api_doc_parser/models/result.py#L1-L55)
-- [document.py](file://api-doc-parser/src/api_doc_parser/models/document.py#L1-L75)
-- [parser.py](file://api-doc-parser/src/api_doc_parser/core/parser.py#L1-L304)
-- [chunker.py](file://api-doc-parser/src/api_doc_parser/core/chunker.py#L1-L377)
-- [factory.py](file://api-doc-parser/src/api_doc_parser/providers/factory.py#L1-L71)
-- [base.py](file://api-doc-parser/src/api_doc_parser/providers/base.py#L1-L143)
-- [config.py](file://api-doc-parser/src/api_doc_parser/config.py#L1-L57)
-- [.env.example](file://api-doc-parser/.env.example#L1-L22)
+**图表来源**
+- [api.py](file://src/api.py#L1-L371)
+- [request.py](file://src/models/request.py#L1-L57)
+- [result.py](file://src/models/result.py#L1-L55)
+- [document.py](file://src/models/document.py#L1-L75)
+- [parser.py](file://src/core/parser.py#L1-L304)
+- [chunker.py](file://src/core/chunker.py#L1-L377)
+- [factory.py](file://src/providers/factory.py#L1-L71)
+- [base.py](file://src/providers/base.py#L1-L143)
+- [config.py](file://src/config.py#L1-L57)
+- [.env.example](file://.env.example#L1-L22)
 
-章节来源
-- [api.py](file://api-doc-parser/src/api_doc_parser/api.py#L1-L371)
-- [README.md](file://api-doc-parser/README.md#L1-L176)
+**章节来源**
+- [api.py](file://src/api.py#L1-L371)
+- [README.md](file://README.md#L1-L206)
 
 ## 核心组件
 - FastAPI 应用与路由：提供根路径、健康检查、异步解析、同步解析、任务状态查询、提供商列表等端点。
@@ -96,15 +105,15 @@ ENV --> CFG
 - 提供方体系：统一抽象 LLMProvider 基类，工厂按提供商名称选择具体实现（OpenAI/Azure Anthropic/Ollama 及自定义协议）。
 - 数据模型：ParseRequest/ParseConfig/RequirementDoc/DocumentSource、ParseResult/ParseMetadata、Document/Chunk 等。
 
-章节来源
-- [api.py](file://api-doc-parser/src/api_doc_parser/api.py#L1-L371)
-- [parser.py](file://api-doc-parser/src/api_doc_parser/core/parser.py#L1-L304)
-- [chunker.py](file://api-doc-parser/src/api_doc_parser/core/chunker.py#L1-L377)
-- [factory.py](file://api-doc-parser/src/api_doc_parser/providers/factory.py#L1-L71)
-- [base.py](file://api-doc-parser/src/api_doc_parser/providers/base.py#L1-L143)
-- [request.py](file://api-doc-parser/src/api_doc_parser/models/request.py#L1-L57)
-- [result.py](file://api-doc-parser/src/api_doc_parser/models/result.py#L1-L55)
-- [document.py](file://api-doc-parser/src/api_doc_parser/models/document.py#L1-L75)
+**章节来源**
+- [api.py](file://src/api.py#L1-L371)
+- [parser.py](file://src/core/parser.py#L1-L304)
+- [chunker.py](file://src/core/chunker.py#L1-L377)
+- [factory.py](file://src/providers/factory.py#L1-L71)
+- [base.py](file://src/providers/base.py#L1-L143)
+- [request.py](file://src/models/request.py#L1-L57)
+- [result.py](file://src/models/result.py#L1-L55)
+- [document.py](file://src/models/document.py#L1-L75)
 
 ## 架构总览
 下图展示从客户端到解析器的整体调用链路与数据流。
@@ -135,12 +144,12 @@ Client->>API : "GET /parse/{task_id}"轮询状态
 API-->>Client : "返回任务状态/进度/结果"
 ```
 
-图表来源
-- [api.py](file://api-doc-parser/src/api_doc_parser/api.py#L76-L174)
-- [parser.py](file://api-doc-parser/src/api_doc_parser/core/parser.py#L46-L128)
-- [chunker.py](file://api-doc-parser/src/api_doc_parser/core/chunker.py#L28-L62)
-- [factory.py](file://api-doc-parser/src/api_doc_parser/providers/factory.py#L14-L71)
-- [base.py](file://api-doc-parser/src/api_doc_parser/providers/base.py#L27-L57)
+**图表来源**
+- [api.py](file://src/api.py#L76-L174)
+- [parser.py](file://src/core/parser.py#L46-L128)
+- [chunker.py](file://src/core/chunker.py#L28-L62)
+- [factory.py](file://src/providers/factory.py#L14-L71)
+- [base.py](file://src/providers/base.py#L27-L57)
 
 ## 详细组件分析
 
@@ -183,9 +192,9 @@ API-->>Client : "返回任务状态/进度/结果"
   - URL：/providers
   - 响应：提供商清单（名称、说明、是否需要 API Key、是否需要 API Base）
 
-章节来源
-- [api.py](file://api-doc-parser/src/api_doc_parser/api.py#L60-L300)
-- [README.md](file://api-doc-parser/README.md#L88-L94)
+**章节来源**
+- [api.py](file://src/api.py#L60-L300)
+- [README.md](file://README.md#L106-L112)
 
 ### 请求与响应模型
 - ParseRequest：包含源文档、解析要求、配置、增量更新历史
@@ -195,10 +204,10 @@ API-->>Client : "返回任务状态/进度/结果"
 - ParseResult：解析结果数据、元数据（分块统计、置信度、警告、处理时间、模型/提供商）、增量标记与变更字段
 - TaskStatus：任务状态、时间戳、进度、结果、错误
 
-章节来源
-- [request.py](file://api-doc-parser/src/api_doc_parser/models/request.py#L1-L57)
-- [result.py](file://api-doc-parser/src/api_doc_parser/models/result.py#L1-L55)
-- [document.py](file://api-doc-parser/src/api_doc_parser/models/document.py#L1-L75)
+**章节来源**
+- [request.py](file://src/models/request.py#L1-L57)
+- [result.py](file://src/models/result.py#L1-L55)
+- [document.py](file://src/models/document.py#L1-L75)
 
 ### 异步任务与状态查询
 - 任务存储：内存字典 tasks（生产环境建议替换为 Redis/Celery）
@@ -218,13 +227,13 @@ Processing --> Error["异常捕获"]
 Error --> Failed["状态: failed<br/>记录错误"]
 ```
 
-图表来源
-- [api.py](file://api-doc-parser/src/api_doc_parser/api.py#L302-L353)
-- [parser.py](file://api-doc-parser/src/api_doc_parser/core/parser.py#L130-L169)
+**图表来源**
+- [api.py](file://src/api.py#L302-L353)
+- [parser.py](file://src/core/parser.py#L130-L169)
 
-章节来源
-- [api.py](file://api-doc-parser/src/api_doc_parser/api.py#L30-L353)
-- [parser.py](file://api-doc-parser/src/api_doc_parser/core/parser.py#L130-L169)
+**章节来源**
+- [api.py](file://src/api.py#L30-L353)
+- [parser.py](file://src/core/parser.py#L130-L169)
 
 ### 解析流程与并发控制
 - 文档加载：根据文件类型选择加载器
@@ -246,15 +255,15 @@ G --> H["合并结果与统计"]
 H --> I["输出 ParseResult"]
 ```
 
-图表来源
-- [chunker.py](file://api-doc-parser/src/api_doc_parser/core/chunker.py#L28-L62)
-- [chunker.py](file://api-doc-parser/src/api_doc_parser/core/chunker.py#L166-L201)
-- [parser.py](file://api-doc-parser/src/api_doc_parser/core/parser.py#L130-L169)
-- [parser.py](file://api-doc-parser/src/api_doc_parser/core/parser.py#L202-L269)
+**图表来源**
+- [chunker.py](file://src/core/chunker.py#L28-L62)
+- [chunker.py](file://src/core/chunker.py#L166-L201)
+- [parser.py](file://src/core/parser.py#L130-L169)
+- [parser.py](file://src/core/parser.py#L202-L269)
 
-章节来源
-- [chunker.py](file://api-doc-parser/src/api_doc_parser/core/chunker.py#L1-L377)
-- [parser.py](file://api-doc-parser/src/api_doc_parser/core/parser.py#L1-L304)
+**章节来源**
+- [chunker.py](file://src/core/chunker.py#L1-L377)
+- [parser.py](file://src/core/parser.py#L1-L304)
 
 ### 提供商与工厂
 - 抽象基类 LLMProvider：定义 parse、get_default_model、系统提示词构建、JSON 响应解析等通用逻辑
@@ -284,22 +293,22 @@ LLMProvider <|-- CustomOpenAIProvider
 LLMProvider <|-- CustomAnthropicProvider
 ```
 
-图表来源
-- [base.py](file://api-doc-parser/src/api_doc_parser/providers/base.py#L27-L143)
-- [factory.py](file://api-doc-parser/src/api_doc_parser/providers/factory.py#L14-L71)
+**图表来源**
+- [base.py](file://src/providers/base.py#L27-L143)
+- [factory.py](file://src/providers/factory.py#L14-L71)
 
-章节来源
-- [base.py](file://api-doc-parser/src/api_doc_parser/providers/base.py#L1-L143)
-- [factory.py](file://api-doc-parser/src/api_doc_parser/providers/factory.py#L1-L71)
+**章节来源**
+- [base.py](file://src/providers/base.py#L1-L143)
+- [factory.py](file://src/providers/factory.py#L1-L71)
 
 ### 配置与环境
 - 应用配置：应用名、调试模式、默认模型、分块参数、最大重试、文件大小限制、上传目录
 - LLM 配置：OpenAI/Azure Anthropic/Ollama 的 API Key/Base URL，默认模型、API 版本等
 - 环境变量：OPENAI_API_KEY、ANTHROPIC_API_KEY、AZURE_*、OLLAMA_BASE_URL、REDIS_URL 等
 
-章节来源
-- [config.py](file://api-doc-parser/src/api_doc_parser/config.py#L1-L57)
-- [.env.example](file://api-doc-parser/.env.example#L1-L22)
+**章节来源**
+- [config.py](file://src/config.py#L1-L57)
+- [.env.example](file://.env.example#L1-L22)
 
 ## 依赖分析
 - Web 框架与运行：FastAPI、Uvicorn
@@ -310,8 +319,8 @@ LLMProvider <|-- CustomAnthropicProvider
 - 任务队列：Celery、Redis（可选）
 - 工具：tiktoken、structlog、python-multipart、aiofiles、httpx
 
-章节来源
-- [pyproject.toml](file://api-doc-parser/pyproject.toml#L1-L100)
+**章节来源**
+- [pyproject.toml](file://pyproject.toml#L1-L100)
 
 ## 性能考虑
 - 并发限制：解析器对分块并发使用信号量，默认限制为 5，可根据资源调整
@@ -324,10 +333,10 @@ LLMProvider <|-- CustomAnthropicProvider
   - 根据模型与并发能力调整 chunk_size 与并发数
   - 对重复文档启用缓存，合理设置缓存键
 
-章节来源
-- [parser.py](file://api-doc-parser/src/api_doc_parser/core/parser.py#L130-L169)
-- [parser.py](file://api-doc-parser/src/api_doc_parser/core/parser.py#L178-L191)
-- [config.py](file://api-doc-parser/src/api_doc_parser/config.py#L44-L52)
+**章节来源**
+- [parser.py](file://src/core/parser.py#L130-L169)
+- [parser.py](file://src/core/parser.py#L178-L191)
+- [config.py](file://src/config.py#L44-L52)
 
 ## 故障排查指南
 - 常见错误
@@ -346,12 +355,12 @@ LLMProvider <|-- CustomAnthropicProvider
   - 查看任务状态中的 error 字段获取异常详情
   - 检查 .env 中的 API Key/Base URL 配置
 
-章节来源
-- [api.py](file://api-doc-parser/src/api_doc_parser/api.py#L94-L124)
-- [api.py](file://api-doc-parser/src/api_doc_parser/api.py#L108-L113)
-- [api.py](file://api-doc-parser/src/api_doc_parser/api.py#L161-L162)
-- [api.py](file://api-doc-parser/src/api_doc_parser/api.py#L308-L353)
-- [factory.py](file://api-doc-parser/src/api_doc_parser/providers/factory.py#L66-L69)
+**章节来源**
+- [api.py](file://src/api.py#L94-L124)
+- [api.py](file://src/api.py#L108-L113)
+- [api.py](file://src/api.py#L161-L162)
+- [api.py](file://src/api.py#L308-L353)
+- [factory.py](file://src/providers/factory.py#L66-L69)
 
 ## 结论
 本 Web 服务 API 提供了完整的异步与同步解析能力，支持多格式文档与多提供商 LLM，具备结构感知分块、并发解析、结果合并与元数据统计等核心能力。生产部署建议结合 Redis/Celery 实现稳定的任务队列，合理配置并发与分块参数以获得最佳性能与稳定性。
@@ -372,18 +381,18 @@ LLMProvider <|-- CustomAnthropicProvider
 - GET /providers
   - 用途：列出支持的 LLM 提供商
 
-章节来源
-- [api.py](file://api-doc-parser/src/api_doc_parser/api.py#L60-L300)
-- [README.md](file://api-doc-parser/README.md#L88-L94)
+**章节来源**
+- [api.py](file://src/api.py#L60-L300)
+- [README.md](file://README.md#L106-L112)
 
 ### 身份验证与安全
 - 当前版本未实现全局鉴权中间件，建议在网关或反向代理层增加鉴权与速率限制
 - API Key 通过表单参数传递，建议仅在受控网络或 HTTPS 下使用
 - 自定义提供商需提供 api_base，注意 Base URL 的访问控制与证书校验
 
-章节来源
-- [api.py](file://api-doc-parser/src/api_doc_parser/api.py#L76-L146)
-- [factory.py](file://api-doc-parser/src/api_doc_parser/providers/factory.py#L66-L69)
+**章节来源**
+- [api.py](file://src/api.py#L76-L146)
+- [factory.py](file://src/providers/factory.py#L66-L69)
 
 ### 版本信息
 - 服务版本：0.1.0
@@ -391,10 +400,10 @@ LLMProvider <|-- CustomAnthropicProvider
 - FastAPI 版本：>=0.109.0
 - Uvicorn 版本：>=0.27.0
 
-章节来源
-- [api.py](file://api-doc-parser/src/api_doc_parser/api.py#L24-L28)
-- [README.md](file://api-doc-parser/README.md#L1-L176)
-- [pyproject.toml](file://api-doc-parser/pyproject.toml#L5-L29)
+**章节来源**
+- [api.py](file://src/api.py#L24-L28)
+- [README.md](file://README.md#L1-L206)
+- [pyproject.toml](file://pyproject.toml#L5-L29)
 
 ### 常见用例与客户端实现建议
 - 异步解析（推荐）
@@ -408,9 +417,9 @@ LLMProvider <|-- CustomAnthropicProvider
   - 对 /parse/{task_id} 设置指数退避轮询
   - 对 /providers 获取可用提供商列表，动态选择 provider/model
 
-章节来源
-- [api.py](file://api-doc-parser/src/api_doc_parser/api.py#L76-L174)
-- [README.md](file://api-doc-parser/README.md#L78-L86)
+**章节来源**
+- [api.py](file://src/api.py#L76-L174)
+- [README.md](file://README.md#L66-L91)
 
 ### 调试工具与监控
 - 文档与交互：启动后访问 /docs 查看交互式 API 文档
@@ -418,13 +427,11 @@ LLMProvider <|-- CustomAnthropicProvider
 - 进度：通过任务状态中的 progress 字段观察解析进度
 - 统计：ParseResult.metadata 包含分块统计、置信度、处理时间等
 
-章节来源
-- [api.py](file://api-doc-parser/src/api_doc_parser/api.py#L368-L371)
-- [parser.py](file://api-doc-parser/src/api_doc_parser/core/parser.py#L72-L76)
-- [parser.py](file://api-doc-parser/src/api_doc_parser/core/parser.py#L99-L113)
+**章节来源**
+- [api.py](file://src/api.py#L368-L371)
+- [parser.py](file://src/core/parser.py#L72-L76)
+- [parser.py](file://src/core/parser.py#L99-L113)
 
 ### 已弃用功能与向后兼容性
 - 本版本未发现弃用接口或功能变更记录
 - 若未来引入新版本，建议通过 URL 版本化（如 /v1/parse）或 Accept 头协商
-
-[本节为概念性说明，不直接分析具体文件]
