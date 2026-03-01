@@ -2,6 +2,9 @@
 
 使用大模型智能解析API文档的工具，支持PDF、Word、Excel等多种格式，可输出结构化的JSON数据。
 
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ## 功能特性
 
 - **多格式支持**: PDF、Word (docx)、Excel (xlsx)、纯文本
@@ -11,13 +14,20 @@
 - **增量更新**: 支持文档变更的增量解析
 - **多种使用方式**: CLI命令行 + FastAPI Web服务
 
+## 系统要求
+
+- Python >= 3.11
+- 支持的操作系统: macOS, Linux, Windows
+
 ## 快速开始
 
 ### 安装
 
+#### 方式1: 使用 pip 安装（推荐）
+
 ```bash
 # 克隆仓库
-git clone <repository-url>
+git clone https://github.com/wowzhangji/doc_ai_parser.git
 cd doc_ai_parser
 
 # 创建虚拟环境
@@ -26,7 +36,21 @@ source .venv/bin/activate  # Linux/Mac
 # 或 .venv\Scripts\activate  # Windows
 
 # 安装依赖
-pip install -e ".[dev]"
+pip install -r requirements.txt
+
+# 开发环境安装（包含测试和代码检查工具）
+pip install -r requirements-dev.txt
+pip install -e .
+```
+
+#### 方式2: 使用 Makefile
+
+```bash
+# 安装生产环境
+make install
+
+# 安装开发环境
+make install-dev
 ```
 
 ### 配置环境变量
@@ -80,6 +104,9 @@ api-doc-parser providers
 ```bash
 # 启动服务
 uvicorn src.api:app --reload
+
+# 或使用 Makefile
+make run-api
 
 # 访问API文档
 open http://localhost:8000/docs
@@ -152,6 +179,9 @@ doc_ai_parser/
 │   ├── providers/          # LLM提供商
 │   └── utils/              # 工具函数
 ├── tests/                  # 测试
+├── requirements.txt        # 生产依赖
+├── requirements-dev.txt    # 开发依赖
+├── Makefile               # 常用命令
 ├── pyproject.toml
 └── README.md
 ```
@@ -159,16 +189,27 @@ doc_ai_parser/
 ## 开发
 
 ```bash
+# 查看所有可用命令
+make help
+
 # 运行测试
-pytest
+make test
 
 # 代码格式化
-black src tests
-ruff check src tests
+make format
 
-# 类型检查
-mypy src
+# 代码检查
+make lint
+
+# 清理缓存
+make clean
 ```
+
+## 依赖说明
+
+- `requirements.txt` - 生产环境依赖
+- `requirements-dev.txt` - 开发环境依赖（包含测试工具）
+- `pyproject.toml` - 项目元数据和构建配置
 
 ## License
 

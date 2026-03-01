@@ -73,8 +73,8 @@ dev = [
 api-doc-parser = "src.cli:app"
 
 [project.urls]
-Homepage = "https://github.com/example/api-doc-parser"
-Repository = "https://github.com/example/api-doc-parser"
+Homepage = "https://github.com/wowzhangji/doc_ai_parser"
+Repository = "https://github.com/wowzhangji/doc_ai_parser"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src"]
